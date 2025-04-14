@@ -17,10 +17,10 @@ export default function Header() {
                         <img
                             src="/Avant-Website-Photos/avant-logo.png"
                             alt="Avant Pharma"
-                            className="w-[50px] h-[60px] rounded-full object-cover"
+                            className="w-[50px] h-[60px] md:w-[60px] md:h-[70px] rounded-full object-cover"
                         />
-                        <span className="ml-3 text-xl text-[#009B7A] font-bold">
-                            AVANT PHARMA
+                        <span className="ml-3 text-md md:text-xl text-[#009B7A] font-bold">
+                            Avant Pharmaceuticals (Pvt) Ltd
                         </span>
                     </Link>
 
