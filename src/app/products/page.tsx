@@ -4,6 +4,8 @@ import Image from 'next/image';
 import Header from '../components/header';
 import ContactUs from '../components/contactus';
 import Footer from '../components/footer';
+import RegisteredProductsPage from '../registered-products/page';
+import UnRegisteredProductsPage from '../unregistered-products/page';
 
 export default function Products() {
     const productCategories = [
@@ -43,6 +45,10 @@ export default function Products() {
         <main className='bg-white'>
             {/* Header */}
             <Header />
+
+            <RegisteredProductsPage/>
+
+            <UnRegisteredProductsPage/>
 
             {/* Product Categories */}
             {productCategories.map((category, index) => (
