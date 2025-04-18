@@ -4,7 +4,7 @@ import React from "react";
 export default function ContactUs() {
     const handleClick = () => {
         const isMobile = /Mobi|Android/i.test(navigator.userAgent);
-        const email = "farazali84@yahoo.com";
+        const email = "avantpharmainfo@gmail.com";
         const subject = encodeURIComponent("Inquiry from website");
         const body = encodeURIComponent("Hi Avant Pharma Team,\n\nI have a question regarding...");
 
@@ -17,7 +17,7 @@ export default function ContactUs() {
             window.open(gmailUrl, "_blank");
         }
     };
-    
+
     return (
         <section
             id="contact"
@@ -35,7 +35,7 @@ export default function ContactUs() {
                 <div className="flex flex-col sm:flex-row gap-2 sm:gap-0 w-full">
                     <input
                         type="email"
-                        value="farazali84@yahoo.com"
+                        value="avantpharmainfo@gmail.com"
                         readOnly
                         className="flex-1 rounded sm:rounded-l-md sm:rounded-r-none px-3 sm:px-4 py-2 border border-gray-300 bg-white text-xs sm:text-sm text-gray-700 focus:outline-none"
                     />

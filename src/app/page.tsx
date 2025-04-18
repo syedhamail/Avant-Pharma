@@ -462,10 +462,10 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Product's */}
+      {/* Product's-Packs */}
       <section className="text-gray-600 body-font">
         <div className="container px-4 sm:px-5 py-10 mx-auto">
-          <h1 className="text-center text-3xl sm:text-4xl font-bold text-[#009B7A] mb-8 sm:mb-12">PRODUCTs</h1>
+          <h1 className="text-center text-3xl sm:text-4xl font-bold text-[#009B7A] mb-8 sm:mb-12">PRODUCTs PACKs</h1>
           <div className="flex flex-wrap -mx-2">
             {products.map((product, index) => (
               <div key={index} className="w-1/2 sm:w-1/3 md:w-1/4 lg:w-1/4 p-2">
@@ -481,7 +481,7 @@ export default function Home() {
           </div>
           <div className="flex justify-center mt-8 sm:mt-12">
             <button
-              onClick={() => window.location.href = '/products'}
+              onClick={() => window.location.href = '/products-packs'}
               style={{ background: 'linear-gradient(to right, #00B894, #00D2C6)' }}
               className="inline-flex items-center border-0 py-2 px-5 focus:outline-none rounded-lg text-white font-bold hover:ease-in-out hover:scale-105 transition duration-300">
               View More

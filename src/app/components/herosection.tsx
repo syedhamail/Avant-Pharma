@@ -26,7 +26,7 @@ const HeroSection = () => {
 
                     <div className="flex flex-col sm:flex-row gap-4 justify-center items-center sm:items-stretch">
                         <button
-                            onClick={() => window.location.href = '/products'}
+                            onClick={() => window.location.href = '/products-packs'}
                             style={{ background: 'linear-gradient(to right, #00B894, #00D2C6)' }}
                             className="w-full sm:w-auto inline-flex justify-center items-center font-semibold border-0 py-2.5 px-6 rounded-lg text-white hover:scale-105 transition duration-300"
                         >

@@ -4,13 +4,11 @@ import Image from 'next/image';
 import Header from '../components/header';
 import ContactUs from '../components/contactus';
 import Footer from '../components/footer';
-import RegisteredProductsPage from '../registered-products/page';
-import UnRegisteredProductsPage from '../unregistered-products/page';
 
 export default function Products() {
     const productCategories = [
         {
-            name: "PRODUCTs",
+            name: "PRODUCTs PACKs",
             items: Array.from({ length: 106 }, (_, i) => ({
                 image: `/Avant-Products/${i + 1}.png`,
             }))
@@ -45,10 +43,6 @@ export default function Products() {
         <main className='bg-white'>
             {/* Header */}
             <Header />
-
-            <RegisteredProductsPage/>
-
-            <UnRegisteredProductsPage/>
 
             {/* Product Categories */}
             {productCategories.map((category, index) => (
