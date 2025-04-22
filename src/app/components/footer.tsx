@@ -51,12 +51,14 @@ export default function Footer() {
                     {/* Contact Info */}
                     <div className="w-full">
                         <p className="mb-1">
-                            <span className="font-bold">Phone:</span> 021-35000583
+                            <span className="font-bold">Contact Person:</span> Faraz Ali Syed
                         </p>
                         <p className="mb-1">
-                            <span className="font-bold">Email:</span> avantcommercial@gmail.com
+                            <span className="font-bold">Email ID:</span> farazali84@yahoo.com
                         </p>
-                        <p className="">info@avantpharma.com.pk</p>
+                        <p className="mb-1">
+                            <span className="font-bold">Mobile No:</span> 03218288378
+                        </p>
                     </div>
                 </div>
             </div>

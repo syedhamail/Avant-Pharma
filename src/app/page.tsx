@@ -51,7 +51,7 @@ export default function Home() {
             {/* Image Section */}
             <div className="w-full md:w-1/2 max-w-md h-64 sm:h-80 md:h-96 relative rounded-lg overflow-hidden">
               <Image
-                src="/Avant-Website-Photos/farazSb.png"
+                src="/Avant-Website-Photos/avant-company.png"
                 alt="About Us"
                 fill
                 className="rounded-lg border-2 border-gray-300 shadow-lg object-cover"

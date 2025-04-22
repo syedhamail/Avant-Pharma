@@ -40,7 +40,7 @@ export default function Header() {
                             alt="Avant Pharma"
                             className="w-[50px] h-[60px] md:w-[60px] md:h-[70px] rounded-full object-cover"
                         />
-                        <span className="ml-3 text-md md:text-xl text-[#009B7A] font-bold">
+                        <span className="ml-1 md:ml-3 text-md md:text-xl text-[#009B7A] font-bold">
                             Avant Pharmaceuticals (Pvt) Ltd
                         </span>
                     </Link>
@@ -85,12 +85,6 @@ export default function Header() {
                                     className="block px-4 py-2 text-sm text-gray-800 hover:bg-[#E0F7F4] hover:text-[#009B7A] transition"
                                 >
                                     Registered Product{"'"}s
-                                </Link>
-                                <Link
-                                    href="/unregistered-products"
-                                    className="block px-4 py-2 text-sm text-gray-800 hover:bg-[#E0F7F4] hover:text-[#009B7A] transition"
-                                >
-                                    UnRegistered Product{"'"}s
                                 </Link>
                                 <Link
                                     href="/products-packs"

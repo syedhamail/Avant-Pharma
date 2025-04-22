@@ -20,7 +20,7 @@ export default function AboutSection() {
                         {/* Image - Full width on mobile, fixed width on larger screens */}
                         <div className="w-full sm:w-[90%] md:w-[450px] relative h-64 sm:h-80 md:h-96 rounded-lg overflow-hidden">
                             <Image
-                                src="/Avant-Website-Photos/farazSb.png"
+                                src="/Avant-Website-Photos/avant-company.png"
                                 alt="Faraz Ali - Chairman of Avant Pharma"
                                 width={500}
                                 height={600}
@@ -32,7 +32,7 @@ export default function AboutSection() {
                         <div className="w-full md:w-[90%] lg:w-[500px] mt-6 sm:mt-0">
                             <h2 className="text-2xl sm:text-3xl font-bold text-[#009B7A] mb-4 sm:mb-6">About us</h2>
                             <h3 className='font-bold text-xl sm:text-2xl text-[#009B7A] mb-3 sm:mb-4'>
-                                Chairman: Faraz Ali
+                                Chairman: Faraz Ali Syed
                             </h3>
                             <div className="text-gray-600 space-y-3 sm:space-y-4 mb-4 text-sm sm:text-base">
                                 <p>
