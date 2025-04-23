@@ -54,7 +54,7 @@ export default function Footer() {
                             <span className="font-bold">Contact Person:</span> Faraz Ali Syed
                         </p>
                         <p className="mb-1">
-                            <span className="font-bold">Email ID:</span> farazali84@yahoo.com
+                            <span className="font-bold">Email ID:</span> farazali84@yahoo.com <br /> avantpharmainfo@gmail.com
                         </p>
                         <p className="mb-1">
                             <span className="font-bold">Mobile No:</span> 03218288378
