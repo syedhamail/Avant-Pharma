@@ -33,8 +33,8 @@ export default function Products() {
         },
         {
             name: "LIFE HEALTH CARE DIVISION",
-            items: Array.from({ length: 24 }, (_, i) => ({
-                image: `/Life-Health-Care-Division/${i + 2}.png`,
+            items: Array.from({ length: 23 }, (_, i) => ({
+                image: `/Life-Health-Care-Division/${i + 1}.png`,
             }))
         }
     ];
