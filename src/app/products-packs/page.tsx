@@ -34,7 +34,7 @@ export default function Products() {
         {
             name: "LIFE HEALTH CARE DIVISION",
             items: Array.from({ length: 23 }, (_, i) => ({
-                image: `/Life-Health-Care-Division/${i + 1}.png`,
+                image: `/Life_Health_Care_Division/${i + 1}.png`,
             }))
         }
     ];
