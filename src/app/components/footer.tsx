@@ -59,6 +59,9 @@ export default function Footer() {
                         <p className="mb-1">
                             <span className="font-bold">Mobile No:</span> 03218288378
                         </p>
+                        <p className="mb-1">
+                            <span className="font-bold">Website:</span> <Link href="/">www.avantpharmaceutical.com.pk</Link>
+                        </p>
                     </div>
                 </div>
             </div>
