@@ -18,15 +18,14 @@ export default function RootLayout({
     <html lang="en">
       <head>
         {/* OG tags for social and search preview */}
-        <meta property="og:title" content="Avant Pharmaceuticals" />
-        <meta property="og:description" content="Top pharma company offering healthcare solutions in Pakistan." />
-        <meta property="og:image" content="/Avant-Website-Photos/avant-logo_title.png" />
+        <meta property="og:title" content="Avant Pharmaceuticals | Fast Growing Pharma in Pakistan" />
+        <meta property="og:description" content="Top Pharma Company offering Healthcare Solutions in Pakistan." />
+        <meta property="og:image" content="/favicon.png" />
         <meta property="og:url" content="https://www.avantpharmaceutical.com.pk/" />
         <meta name="twitter:card" content="summary_large_image" />
-        <link
-          rel="icon"
-          href="/Avant-Website-Photos/avant-logo_title.ico"
-        />
+        
+        {/* Correct Favicon */}
+        <link rel="icon" href="/favicon.png" type="image/x-icon" />
       </head>
       <body className={inter.className}>{children}</body>
     </html>
