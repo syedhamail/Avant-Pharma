@@ -20,11 +20,13 @@ export default function RootLayout({
         {/* OG tags for social and search preview */}
         <meta property="og:title" content="Avant Pharmaceuticals | Fast Growing Pharma in Pakistan" />
         <meta property="og:description" content="Top Pharma Company offering Healthcare Solutions in Pakistan." />
-        <meta property="og:image" content="/og-image.png" />
+        <meta property="og:image" content="https://www.avantpharmaceutical.com.pk/og-image.jpg" />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
         <meta property="og:url" content="https://www.avantpharmaceutical.com.pk/" />
         <meta name="twitter:card" content="summary_large_image" />
         
-        {/* Correct Favicon */}
+        {/* Favicon (already fixed in previous step) */}
         <link rel="icon" href="/favicon.png" type="image/png" />
         <link rel="apple-touch-icon" href="/favicon.png" />
       </head>
