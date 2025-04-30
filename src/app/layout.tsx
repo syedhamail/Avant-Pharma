@@ -5,7 +5,7 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Avant Pharmaceuticals | Fast Growing Pharma in Pakistan",
+  title: "AVANT PHARMACEUTICALS",
   description: "Avant Pharma has been operating in Pakistan for more than 11 years. Over this period, the company has successfully developed and strengthened its pharmaceutical ...",
 };
 
@@ -18,7 +18,7 @@ export default function RootLayout({
     <html lang="en">
       <head>
         {/* OG tags for social and search preview */}
-        <meta property="og:title" content="Avant Pharmaceuticals" />
+        <meta property="og:title" content="Avant Pharmaceuticals | Fast Growing Pharma in Pakistan" />
         <meta property="og:description" content="Top Pharma Company offering Healthcare Solutions in Pakistan." />
         <meta property="og:image" content="https://www.avantpharmaceutical.com.pk/og-image.jpg" />
         <meta property="og:image:width" content="1200" />
