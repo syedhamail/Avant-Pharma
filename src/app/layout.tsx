@@ -5,7 +5,7 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "AVANT PHARMACEUTICALS",
+  title: "Avant Pharmaceuticals | Fast Growing Pharma in Pakistan",
   description: "Avant Pharma has been operating in Pakistan for more than 11 years. Over this period, the company has successfully developed and strengthened its pharmaceutical ...",
 };
 
@@ -26,10 +26,11 @@ export default function RootLayout({
         <meta property="og:image:type" content="image/jpeg" />
         <meta property="og:url" content="https://www.avantpharmaceutical.com.pk/" />
         <meta name="twitter:card" content="summary_large_image" />
-        
-        {/* Favicon (already fixed in previous step) */}
-        <link rel="icon" href="/favicon.png" type="image/png" />
-        <link rel="apple-touch-icon" href="/favicon.png" />
+
+        {/* Favicon adjustments */}
+        <link rel="icon" href="/favicon.ico" type="image/x-icon" />
+        <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+        <link rel="apple-touch-icon" href="/favicon.ico" />
       </head>
       <body className={inter.className}>{children}</body>
     </html>
