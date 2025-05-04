@@ -27,10 +27,13 @@ export default function RootLayout({
         <meta property="og:url" content="https://www.avantpharmaceutical.com.pk/" />
         <meta name="twitter:card" content="summary_large_image" />
 
-        {/* Favicon adjustments */}
-        <link rel="icon" href="/favicon.ico" type="image/x-icon" />
-        <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
-        <link rel="apple-touch-icon" href="/favicon.ico" />
+        {/* Favicon adjustments with multiple sizes*/}
+        <link rel="icon" href="/favicon.ico?v=2" type="image/x-icon" />
+        <link rel="shortcut icon" href="/favicon.ico?v=2" type="image/x-icon" />
+        <link rel="apple-touch-icon" href="/favicon.ico?v=2" />
+        <link rel="icon" href="/favicon.ico?v=2" sizes="64x64" />
+        <link rel="icon" href="/favicon.ico?v=2" sizes="32x32" />
+        <link rel="icon" href="/favicon.ico?v=2" sizes="16x16" />
       </head>
       <body className={inter.className}>{children}</body>
     </html>
