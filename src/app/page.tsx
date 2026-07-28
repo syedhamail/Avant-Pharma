@@ -67,7 +67,7 @@ export default function Home() {
               </h2>
               <div className="text-gray-600 space-y-4 mb-6 text-justify">
                 <p>
-                  Avant Pharma has been operating in Pakistan for more than 11 years. Over this period, the company has
+                  Avant Pharma has been operating in Pakistan since 2013. Over this period, the company has
                   successfully developed and strengthened its pharmaceutical marketing and manufacturing base, which
                   enabled us to achieve the distinction of being the fastest growing national pharmaceutical company.
                   We, by the grace of God Almighty, are now amongst the leading pharmaceutical companies operating in Pakistan.
