@@ -1,3 +1,5 @@
+// src/app/checkout/page.tsx
+
 "use client";
 
 import { useCart } from "../context/CartContext";
@@ -9,7 +11,7 @@ import Header from "../components/header";
 import Footer from "../components/footer";
 
 export default function CheckoutPage() {
-    const { cart, buyNowItem } = useCart();
+    const { cart, buyNowItem, setBuyNowItem } = useCart();
     const [mounted, setMounted] = useState(false);
 
     const [email, setEmail] = useState("");
@@ -29,6 +31,15 @@ export default function CheckoutPage() {
     } | null>(null);
 
     useEffect(() => setMounted(true), []);
+
+    // (Optional) If you want to clear buyNowItem when the user leaves the page without ordering,
+    // uncomment the following. Otherwise, we clear it only after successful order.
+    // useEffect(() => {
+    //     return () => {
+    //         setBuyNowItem(null);
+    //     };
+    // }, []);
+
     if (!mounted) return null;
 
     const itemsToShow = buyNowItem ? [buyNowItem] : cart;
@@ -38,7 +49,6 @@ export default function CheckoutPage() {
     );
 
     const discountPercentage = 20;
-
     const discountedSubtotal =
         subtotal - (subtotal * discountPercentage) / 100;
 
@@ -95,6 +105,11 @@ export default function CheckoutPage() {
         showToast("🎉 Order placed successfully!", "success");
         setOrderComplete(true);
 
+        // ✅ FIX: Clear buyNowItem after successful order
+        // This ensures the checkout page doesn't show the item again if the user refreshes
+        // after ordering (though they'll see the order complete screen anyway).
+        setBuyNowItem(null);
+
         // 3️⃣ 📧 Send Email (BACKGROUND - fire & forget)
         fetch("/api/send-order-email", {
             method: "POST",
@@ -126,7 +141,6 @@ export default function CheckoutPage() {
 
     if (orderComplete) {
         return (
-
             <div className="min-h-screen flex items-center justify-center bg-white">
                 <div className="p-6 bg-green-100 rounded shadow max-w-md text-center">
                     <h2 className="text-lg font-semibold mb-2">
@@ -166,7 +180,7 @@ export default function CheckoutPage() {
 
             <section className="container mx-auto max-w-7xl px-4 py-10 grid grid-cols-1 lg:grid-cols-2 gap-10">
 
-                {/* LEFT SIDE – FORM (DESIGN SAME) */}
+                {/* LEFT SIDE – FORM */}
                 <form onSubmit={handleSubmit} className="space-y-6">
                     <div>
                         <h2 className="text-lg font-semibold mb-4">Contact</h2>
@@ -212,7 +226,7 @@ export default function CheckoutPage() {
                     </div>
                 </form>
 
-                {/* RIGHT SIDE – SUMMARY (DESIGN SAME) */}
+                {/* RIGHT SIDE – SUMMARY */}
                 <div className="border rounded-lg p-5 h-fit">
                     {/* Products (ORIGINAL PRICE) */}
                     {itemsToShow.map((item) => (
