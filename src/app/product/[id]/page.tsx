@@ -1,48 +1,39 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useParams, useRouter } from "next/navigation";
 import Image from "next/image";
+import { useState } from "react";
+import { FaStar, FaPlus, FaMinus } from "react-icons/fa";
+import products from "../../data/products"; // ✅ correct path
+import Header from "../../components/header"; // ✅ correct path
+import Footer from "../../components/footer"; // ✅ correct path
+import Toast from "../../components/Toast"; // ✅ correct path
+import { useCart } from "../../context/CartContext"; // ✅ correct path
 import Link from "next/link";
-import { FaStar } from "react-icons/fa";
-import products from "../data/products";
-import Header from "../components/header";
-import Footer from "../components/footer";
-import Toast from "../components/Toast";
-import { useCart } from "../context/CartContext";
 
-export default function AllProductsPage() {
-  const { addToCart, cart } = useCart(); // ✅ cart bhi lo
+export default function ProductDetailPage() {
+  const { id } = useParams();
+  const router = useRouter();
+  const { addToCart, setBuyNowItem, cart } = useCart(); // cart for checking existence
 
+  const [qty, setQty] = useState(1);
   const [showToast, setShowToast] = useState(false);
   const [toastMsg, setToastMsg] = useState("");
 
-  // Filtering state
-  const [selectedCategory, setSelectedCategory] = useState("All");
-  const [selectedPrice, setSelectedPrice] = useState("All");
-  const [selectedSort, setSelectedSort] = useState("default");
+  // Find product – TypeScript will infer type
+  const product = products.find((p) => p.id === Number(id));
 
-  const categories = [
-    "All",
-    ...new Set(products.map((p) => p.category).filter(Boolean)),
-  ];
+  if (!product) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <p className="text-lg font-semibold">Product not found</p>
+      </div>
+    );
+  }
 
-  const filteredProducts = products
-    .filter((p) => {
-      if (selectedCategory === "All") return true;
-      return p.category === selectedCategory;
-    })
-    .filter((p) => {
-      if (selectedPrice === "All") return true;
-      if (selectedPrice === "Under 500") return p.price < 500;
-      if (selectedPrice === "500 - 1000") return p.price >= 500 && p.price <= 1000;
-      if (selectedPrice === "Above 1000") return p.price > 1000;
-      return true;
-    })
-    .sort((a, b) => {
-      if (selectedSort === "low-to-high") return a.price - b.price;
-      if (selectedSort === "high-to-low") return b.price - a.price;
-      return 0;
-    });
+  const discountPercentage = product.discount || 0;
+  const discountedPrice =
+    product.price - (product.price * discountPercentage) / 100;
 
   const renderStars = (rating: number) => (
     <div className="flex items-center gap-1 text-yellow-500 text-sm">
@@ -57,8 +48,8 @@ export default function AllProductsPage() {
     </div>
   );
 
-  const handleAddToCart = (product: any) => {
-    const productId = String(product.id); // ✅ string conversion
+  const handleAddToCart = () => {
+    const productId = String(product.id); // id ko string banayen
     const exists = cart.some((item) => item.id === productId);
 
     if (exists) {
@@ -69,7 +60,7 @@ export default function AllProductsPage() {
         name: product.name,
         price: product.price,
         image: Array.isArray(product.image) ? product.image[0] : product.image,
-        qty: 1,
+        qty: qty,
         category: product.category,
       });
       setToastMsg("Product added to cart!");
@@ -79,110 +70,134 @@ export default function AllProductsPage() {
     setTimeout(() => setShowToast(false), 2000);
   };
 
+  const handleBuyNow = () => {
+    const productId = String(product.id);
+    setBuyNowItem({
+      id: productId,
+      name: product.name,
+      price: product.price,
+      image: Array.isArray(product.image) ? product.image[0] : product.image,
+      qty: qty,
+      category: product.category,
+    });
+    router.push(`/checkout?buyNowId=${productId}`);
+  };
+
   return (
     <main className="bg-white min-h-screen">
       <Header />
 
       <section className="py-12">
         <div className="container mx-auto px-6 max-w-7xl">
-          {/* Page Title */}
-          <h1 className="text-3xl font-bold mb-8 text-center">All Products</h1>
+          {/* Breadcrumb */}
+          <p className="text-sm text-gray-500 mb-6 flex flex-wrap items-center">
+            <Link href="/" className="hover:underline">
+              Home
+            </Link>
+            <span className="mx-2">›</span>
+            <span className="truncate sm:truncate-none">{product.name}</span>
+            {!product.inStock && (
+              <>
+                <span className="mx-2">›</span>
+                <span className="bg-red-600 text-white text-xs px-2 py-0.5 rounded mt-1 sm:mt-0">
+                  Out of Stock
+                </span>
+              </>
+            )}
+          </p>
 
-          {/* Filters */}
-          <div className="flex flex-wrap gap-4 mb-8 justify-center">
-            <select
-              className="border px-4 py-2 rounded"
-              value={selectedCategory}
-              onChange={(e) => setSelectedCategory(e.target.value)}
-            >
-              {categories.map((cat) => (
-                <option key={cat} value={cat}>
-                  {cat}
-                </option>
-              ))}
-            </select>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-14 items-start">
+            {/* LEFT IMAGE */}
+            <div className="flex justify-center items-start">
+              <div className="relative w-[400px] h-[500px]">
+                <Image
+                  src={
+                    Array.isArray(product.image)
+                      ? product.image[0]
+                      : product.image
+                  }
+                  alt={product.name}
+                  fill
+                  className="object-contain"
+                />
+              </div>
+            </div>
 
-            <select
-              className="border px-4 py-2 rounded"
-              value={selectedPrice}
-              onChange={(e) => setSelectedPrice(e.target.value)}
-            >
-              <option value="All">All Prices</option>
-              <option value="Under 500">Under Rs.500</option>
-              <option value="500 - 1000">Rs.500 - Rs.1000</option>
-              <option value="Above 1000">Above Rs.1000</option>
-            </select>
+            {/* RIGHT CONTENT */}
+            <div>
+              <h1 className="text-3xl font-semibold mb-2">
+                {product.name}
+              </h1>
 
-            <select
-              className="border px-4 py-2 rounded"
-              value={selectedSort}
-              onChange={(e) => setSelectedSort(e.target.value)}
-            >
-              <option value="default">Sort by: Default</option>
-              <option value="low-to-high">Price: Low to High</option>
-              <option value="high-to-low">Price: High to Low</option>
-            </select>
-          </div>
+              <div className="mt-1 min-h-[1.25rem] mb-4">
+                {renderStars(product.rating)}
+              </div>
 
-          {/* Products Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {filteredProducts.map((product) => (
-              <div
-                key={product.id}
-                className="border rounded-lg p-4 hover:shadow-lg transition"
-              >
-                <Link href={`/product/${product.id}`}>
-                  <div className="relative w-full h-48 mb-4">
-                    <Image
-                      src={
-                        Array.isArray(product.image)
-                          ? product.image[0]
-                          : product.image
-                      }
-                      alt={product.name}
-                      fill
-                      className="object-contain"
-                    />
-                  </div>
-                  <h2 className="font-semibold text-sm line-clamp-2">
-                    {product.name}
-                  </h2>
-                </Link>
+              <p className="text-2xl font-semibold mb-6">
+                Rs.{product.price.toLocaleString()}
+              </p>
 
-                <div className="mt-1">{renderStars(product.rating)}</div>
+              <div className="mb-6">
+                <h3 className="font-semibold mb-2">Description:</h3>
+                <p className="text-sm text-gray-700 leading-relaxed">
+                  {product.description}
+                </p>
+              </div>
 
-                <div className="flex items-center justify-between mt-2">
-                  <span className="text-lg font-bold">
-                    Rs.{product.price.toLocaleString()}
-                  </span>
-                  {product.discount > 0 && (
-                    <span className="text-xs bg-red-100 text-red-700 px-2 py-0.5 rounded">
-                      {product.discount}% OFF
-                    </span>
-                  )}
+              {/* Quantity */}
+              <div className="mb-6">
+                <p className="text-sm font-medium mb-2">Quantity:</p>
+                <div className="flex items-center gap-3">
+                  <button
+                    onClick={() => setQty(Math.max(1, qty - 1))}
+                    className="border p-2"
+                  >
+                    <FaMinus />
+                  </button>
+                  <span className="min-w-[30px] text-center">{qty}</span>
+                  <button
+                    onClick={() => setQty(qty + 1)}
+                    className="border p-2"
+                  >
+                    <FaPlus />
+                  </button>
                 </div>
+              </div>
+
+              <p className="text-sm text-gray-600">
+                Discount:{" "}
+                <span className="font-semibold text-green-600">
+                  {discountPercentage}% OFF
+                </span>
+              </p>
+
+              <p className="text-sm text-gray-600 mb-6">
+                Subtotal:{" "}
+                <span className="font-semibold">
+                  Rs.{(discountedPrice * qty).toLocaleString()}
+                </span>
+              </p>
+
+              {/* Buttons */}
+              <div className="flex gap-4">
+                <button
+                  onClick={handleAddToCart}
+                  disabled={!product.inStock}
+                  className="flex-1 text-[#009B7A] border border-[#009B7A] py-4 font-medium hover:bg-[#07b38e] hover:text-white"
+                >
+                  ADD TO CART
+                </button>
 
                 <button
-                  onClick={() => handleAddToCart(product)}
+                  onClick={handleBuyNow}
                   disabled={!product.inStock}
-                  className={`mt-4 w-full py-2 text-sm font-medium border rounded
-                    ${
-                      product.inStock
-                        ? "text-[#009B7A] border-[#009B7A] hover:bg-[#009B7A] hover:text-white"
-                        : "text-gray-400 border-gray-300 cursor-not-allowed"
-                    }`}
+                  className="flex-1 text-[#009B7A] border border-[#009B7A] py-4 font-medium hover:bg-[#07b38e] hover:text-white"
                 >
-                  {product.inStock ? "ADD TO CART" : "OUT OF STOCK"}
+                  BUY IT NOW
                 </button>
               </div>
-            ))}
+            </div>
           </div>
-
-          {filteredProducts.length === 0 && (
-            <p className="text-center text-gray-500 mt-8">
-              No products found matching your filters.
-            </p>
-          )}
         </div>
       </section>
 
