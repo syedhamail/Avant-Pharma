@@ -4,16 +4,14 @@
 
 import { useCart } from "../context/CartContext";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import Link from "next/link";
 import { supabase } from "@/lib/supabase";
 import Header from "../components/header";
 import Footer from "../components/footer";
 import { useSearchParams } from "next/navigation";
-// Import your product data (if static) – adjust path accordingly
-// import { allProducts } from "@/data/products";
 
-export default function CheckoutPage() {
+function CheckoutContent() {
     const { cart, buyNowItem, setBuyNowItem } = useCart();
     const searchParams = useSearchParams();
     const buyNowId = searchParams.get("buyNowId");
@@ -45,10 +43,9 @@ export default function CheckoutPage() {
     useEffect(() => {
         if (!mounted) return;
         if (buyNowId && !buyNowItem) {
-            // Option 1: Fetch from Supabase
             const fetchProduct = async () => {
                 const { data, error } = await supabase
-                    .from("products") // change to your actual table name
+                    .from("products")
                     .select("*")
                     .eq("id", buyNowId)
                     .single();
@@ -64,10 +61,6 @@ export default function CheckoutPage() {
                 }
             };
             fetchProduct();
-
-            // Option 2: If you have static data, use it instead:
-            // const found = allProducts.find(p => p.id === buyNowId);
-            // if (found) setBuyNowItem({ ...found, qty: 1 });
         }
     }, [buyNowId, buyNowItem, mounted, setBuyNowItem]);
 
@@ -131,11 +124,8 @@ export default function CheckoutPage() {
 
         showToast("🎉 Order placed successfully!", "success");
         setOrderComplete(true);
-
-        // Clear buyNowItem after successful order
         setBuyNowItem(null);
 
-        // Background emails...
         fetch("/api/send-order-email", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -300,5 +290,13 @@ export default function CheckoutPage() {
 
             <Footer />
         </main>
+    );
+}
+
+export default function CheckoutPage() {
+    return (
+        <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}>
+            <CheckoutContent />
+        </Suspense>
     );
 }
