@@ -1,6 +1,12 @@
 import { createClient } from "@supabase/supabase-js";
 
-export const supabase = createClient(
-  "https://hufvwdnmelytdbstzvww.supabase.co",
-  "sb_publishable_R_sKz_VWC_WUbTyM6-Q5kw_kah-EDim"
-);
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+
+if (!supabaseUrl || !supabaseAnonKey) {
+  throw new Error(
+    "Missing Supabase env vars. Check .env.local (NEXT_PUBLIC_SUPABASE_URL / NEXT_PUBLIC_SUPABASE_ANON_KEY)."
+  );
+}
+
+export const supabase = createClient(supabaseUrl, supabaseAnonKey);
