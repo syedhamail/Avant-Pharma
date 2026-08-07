@@ -1,415 +1,192 @@
 "use client";
 
-import React, { useState } from "react";
+import { useState } from "react";
+import Image from "next/image";
+import Link from "next/link";
+import { FaStar } from "react-icons/fa";
 import products from "../data/products";
 import Header from "../components/header";
 import Footer from "../components/footer";
-import Link from "next/link";
-import { FaCartPlus } from "react-icons/fa";
-import Image from "next/image";
-import { FaStar } from "react-icons/fa";
-import { useCart } from "../context/CartContext";
 import Toast from "../components/Toast";
+import { useCart } from "../context/CartContext";
 
-export default function ProductsPage() {
+export default function AllProductsPage() {
+  const { addToCart, cart } = useCart(); // ✅ cart bhi lo
 
-    const [filters, setFilters] = useState<{
-        mainCategory: "all" | "nutraceuticals" | "general-psychiatry";
-        subCategory: string;
-        inStock: boolean;
-        price: number;
-    }>({
-        mainCategory: "all",
-        subCategory: "",
-        inStock: false,
-        price: 3000,
+  const [showToast, setShowToast] = useState(false);
+  const [toastMsg, setToastMsg] = useState("");
+
+  // Filtering state
+  const [selectedCategory, setSelectedCategory] = useState("All");
+  const [selectedPrice, setSelectedPrice] = useState("All");
+  const [selectedSort, setSelectedSort] = useState("default");
+
+  const categories = [
+    "All",
+    ...new Set(products.map((p) => p.category).filter(Boolean)),
+  ];
+
+  const filteredProducts = products
+    .filter((p) => {
+      if (selectedCategory === "All") return true;
+      return p.category === selectedCategory;
+    })
+    .filter((p) => {
+      if (selectedPrice === "All") return true;
+      if (selectedPrice === "Under 500") return p.price < 500;
+      if (selectedPrice === "500 - 1000") return p.price >= 500 && p.price <= 1000;
+      if (selectedPrice === "Above 1000") return p.price > 1000;
+      return true;
+    })
+    .sort((a, b) => {
+      if (selectedSort === "low-to-high") return a.price - b.price;
+      if (selectedSort === "high-to-low") return b.price - a.price;
+      return 0;
     });
 
-    const [visibleCount, setVisibleCount] = useState(20);
-    const [sortBy, setSortBy] = useState("az");
-    const [showMobileFilters, setShowMobileFilters] = useState(false);
-    const [gpOpen, setGpOpen] = useState(false); // General & Psychiatry dropdown
+  const renderStars = (rating: number) => (
+    <div className="flex items-center gap-1 text-yellow-500 text-sm">
+      {Array.from({ length: 5 }).map((_, i) => (
+        <FaStar
+          key={i}
+          className={i < Math.round(rating) ? "opacity-100" : "opacity-30"}
+          size={14}
+        />
+      ))}
+      <span className="text-gray-600 ml-1">({rating})</span>
+    </div>
+  );
 
-    /* ================= GENERAL & PSYCHIATRY SUB-CATEGORIES ================= */
-    const generalPsychiatryCategories = Array.from(
-        new Set(
-            products
-                .filter((p) => p.generalPsychiatryProducts)
-                .map((p) => p.category)
-        )
-    ).sort((a, b) => a.localeCompare(b));
+  const handleAddToCart = (product: any) => {
+    const productId = String(product.id); // ✅ string conversion
+    const exists = cart.some((item) => item.id === productId);
 
+    if (exists) {
+      setToastMsg("Product already in cart");
+    } else {
+      addToCart({
+        id: productId,
+        name: product.name,
+        price: product.price,
+        image: Array.isArray(product.image) ? product.image[0] : product.image,
+        qty: 1,
+        category: product.category,
+      });
+      setToastMsg("Product added to cart!");
+    }
 
-    /* ================= FILTER + SORT ================= */
-    const filteredProducts = [...products]
-        .filter((product) => {
+    setShowToast(true);
+    setTimeout(() => setShowToast(false), 2000);
+  };
 
-            // 🔹 ALL PRODUCTS
-            if (filters.mainCategory === "all") {
-                return (
-                    (!filters.inStock || product.inStock !== false) &&
-                    product.price <= filters.price
-                );
-            }
+  return (
+    <main className="bg-white min-h-screen">
+      <Header />
 
-            // 🔹 NUTRACEUTICALS PRODUCTS
-            if (filters.mainCategory === "nutraceuticals") {
-                return (
-                    product.nutraceuticalsProducts === true &&
-                    (!filters.inStock || product.inStock !== false) &&
-                    product.price <= filters.price
-                );
-            }
+      <section className="py-12">
+        <div className="container mx-auto px-6 max-w-7xl">
+          <h1 className="text-3xl font-bold mb-8 text-center">All Products</h1>
 
-            // 🔹 GENERAL & PSYCHIATRY PRODUCTS
-            if (filters.mainCategory === "general-psychiatry") {
-                const matchesSubCategory =
-                    !filters.subCategory ||
-                    product.category === filters.subCategory;
+          {/* Filters */}
+          <div className="flex flex-wrap gap-4 mb-8 justify-center">
+            <select
+              className="border px-4 py-2 rounded"
+              value={selectedCategory}
+              onChange={(e) => setSelectedCategory(e.target.value)}
+            >
+              {categories.map((cat) => (
+                <option key={cat} value={cat}>
+                  {cat}
+                </option>
+              ))}
+            </select>
 
-                return (
-                    product.generalPsychiatryProducts === true &&
-                    matchesSubCategory &&
-                    (!filters.inStock || product.inStock !== false) &&
-                    product.price <= filters.price
-                );
-            }
+            <select
+              className="border px-4 py-2 rounded"
+              value={selectedPrice}
+              onChange={(e) => setSelectedPrice(e.target.value)}
+            >
+              <option value="All">All Prices</option>
+              <option value="Under 500">Under Rs.500</option>
+              <option value="500 - 1000">Rs.500 - Rs.1000</option>
+              <option value="Above 1000">Above Rs.1000</option>
+            </select>
 
-            return true;
-        })
+            <select
+              className="border px-4 py-2 rounded"
+              value={selectedSort}
+              onChange={(e) => setSelectedSort(e.target.value)}
+            >
+              <option value="default">Sort by: Default</option>
+              <option value="low-to-high">Price: Low to High</option>
+              <option value="high-to-low">Price: High to Low</option>
+            </select>
+          </div>
 
-        .sort((a, b) => {
-            switch (sortBy) {
-                case "best-selling":
-                    return (b.rating || 0) - (a.rating || 0);
-
-                case "price-low":
-                    return a.price - b.price;
-
-                case "price-high":
-                    return b.price - a.price;
-
-                case "az":
-                default:
-                    return a.name.localeCompare(b.name);
-
-                case "za":
-                    return b.name.localeCompare(a.name);
-            }
-        });
-
-
-    /* ================= PAGINATION ================= */
-    const visibleProducts = filteredProducts.slice(0, visibleCount);
-
-    /* ================= ADD TO CART ================= */
-    const { addToCart } = useCart();
-    const [showToast, setShowToast] = useState(false);
-    const [toastMsg, setToastMsg] = useState("");
-
-    const handleAddToCart = (product: any) => {
-        const result = addToCart(product);
-
-        setToastMsg(
-            result === "exists"
-                ? "Product already in cart"
-                : "Product added to cart!"
-        );
-
-        setShowToast(true);
-        setTimeout(() => setShowToast(false), 2000);
-    };
-
-    /* ================= FORMAT CATEGORY LABEL ================= */
-    const formatCategoryLabel = (text: string) => {
-        return text
-            .toLowerCase()
-            .split("-")
-            .map(
-                word => word.charAt(0).toUpperCase() + word.slice(1)
-            )
-            .join("-");
-    };
-
-
-    /* ================= RATING STARS ================= */
-    const renderStars = (rating: number) => {
-        return (
-            <div className="flex items-center gap-1 text-yellow-500 text-sm">
-                {Array.from({ length: 5 }).map((_, i) => (
-                    <FaStar
-                        key={i}
-                        className={
-                            i < Math.round(rating)
-                                ? "opacity-100"
-                                : "opacity-30"
-                        }
-                        size={14}
+          {/* Products Grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            {filteredProducts.map((product) => (
+              <div
+                key={product.id}
+                className="border rounded-lg p-4 hover:shadow-lg transition"
+              >
+                <Link href={`/product/${product.id}`}>
+                  <div className="relative w-full h-48 mb-4">
+                    <Image
+                      src={
+                        Array.isArray(product.image)
+                          ? product.image[0]
+                          : product.image
+                      }
+                      alt={product.name}
+                      fill
+                      className="object-contain"
                     />
-                ))}
-                <span className="text-gray-600 ml-1">
-                    ({rating})
-                </span>
-            </div>
-        );
-    };
+                  </div>
+                  <h2 className="font-semibold text-sm line-clamp-2">
+                    {product.name}
+                  </h2>
+                </Link>
 
+                <div className="mt-1">{renderStars(product.rating)}</div>
 
-    return (
-        <main className="bg-white min-h-screen">
-            <Header />
-
-            {showToast && <Toast message={toastMsg} />}
-
-            <section className="py-8 md:py-16">
-                <div className="container mx-auto px-4">
-                    <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center mb-10 text-[#009B7A]">
-                        ALL PRODUCTs
-                    </h1>
-
-                    {/* Mobile Filter Toggle */}
-                    <div className="md:hidden mb-6">
-                        <button
-                            onClick={() => setShowMobileFilters(!showMobileFilters)}
-                            className="w-full bg-gray-900 text-white py-3 rounded-lg font-medium"
-                        >
-                            {showMobileFilters ? "Hide Filters" : "Show Filters"}
-                        </button>
-                    </div>
-
-                    <div className="flex flex-col md:flex-row gap-8 items-start">
-                        {/* ================= LEFT SIDEBAR ================= */}
-                        <aside
-                            className={`${showMobileFilters ? "block" : "hidden"
-                                } md:block w-full md:w-64 bg-white rounded-lg  p-6`}
-                        >
-                            <h2 className="text-xl font-semibold mb-6">Filters</h2>
-
-                            <div className="space-y-8">
-                                {/* Categories */}
-                                <div>
-                                    <h3 className="font-semibold mb-3">Categories</h3>
-
-                                    <ul className="space-y-2 text-sm">
-
-                                        {/* ALL PRODUCTS */}
-                                        <li
-                                            onClick={() =>
-                                                setFilters({
-                                                    ...filters,
-                                                    mainCategory: "all",
-                                                    subCategory: "",
-                                                })
-                                            }
-                                            className={`cursor-pointer ${filters.mainCategory === "all"
-                                                ? "font-semibold"
-                                                : "text-gray-600"
-                                                }`}
-                                        >
-                                            All Products
-                                        </li>
-
-                                        {/* NUTRACEUTICALS */}
-                                        <li
-                                            onClick={() =>
-                                                setFilters({
-                                                    ...filters,
-                                                    mainCategory: "nutraceuticals",
-                                                    subCategory: "",
-                                                })
-                                            }
-                                            className={`cursor-pointer ${filters.mainCategory === "nutraceuticals"
-                                                ? "font-semibold"
-                                                : "text-gray-600"
-                                                }`}
-                                        >
-                                            Nutraceuticals Products
-                                        </li>
-
-                                        {/* GENERAL & PSYCHIATRY */}
-                                        <li
-                                            onClick={() => {
-                                                setGpOpen(!gpOpen);
-                                                setFilters({
-                                                    ...filters,
-                                                    mainCategory: "general-psychiatry",
-                                                    subCategory: "",
-                                                });
-                                            }}
-                                            className={`cursor-pointer flex items-center justify-between ${filters.mainCategory === "general-psychiatry"
-                                                ? "font-semibold"
-                                                : "text-gray-600"
-                                                }`}
-                                        >
-                                            <span>General & Psychiatry Products</span>
-
-                                            <span
-                                                className={`transition-transform duration-300 ${gpOpen ? "rotate-90" : ""
-                                                    }`}
-                                            >
-                                                ▶
-                                            </span>
-                                        </li>
-
-                                        {/* DROPDOWN SUB-CATEGORIES */}
-                                        {filters.mainCategory === "general-psychiatry" && gpOpen && (
-                                            <ul className="ml-4 mt-2 space-y-1">
-                                                {generalPsychiatryCategories.map((cat) => (
-                                                    <li
-                                                        key={cat} // ✅ original value
-                                                        onClick={() =>
-                                                            setFilters({
-                                                                ...filters,
-                                                                subCategory: cat,
-                                                            })
-                                                        }
-                                                        className={`cursor-pointer text-sm ${filters.subCategory === cat
-                                                            ? "font-semibold text-black"
-                                                            : "text-gray-600"
-                                                            }`}
-                                                    >
-                                                        {formatCategoryLabel(cat)}
-                                                    </li>
-                                                ))}
-                                            </ul>
-                                        )}
-                                    </ul>
-                                </div>
-
-
-                                {/* Availability */}
-                                <div>
-                                    <h3 className="font-semibold mb-3">Availability</h3>
-                                    <label className="flex items-center gap-2 text-sm cursor-pointer">
-                                        <input
-                                            type="checkbox"
-                                            checked={filters.inStock}
-                                            onChange={(e) =>
-                                                setFilters({ ...filters, inStock: e.target.checked })
-                                            }
-                                        />
-                                        Show In-Stock Products Only
-                                    </label>
-                                </div>
-
-                            </div>
-                        </aside>
-
-                        {/* ================= PRODUCTS ================= */}
-                        <div className="flex-1">
-
-                            {/* Sort By */}
-                            <div className="flex justify-end mb-4">
-                                <select
-                                    value={sortBy}
-                                    onChange={(e) => setSortBy(e.target.value)}
-                                    className="border px-3 py-2 rounded text-sm"
-                                >
-                                    <option value="best-selling">Best Selling</option>
-                                    <option value="price-low">Price: Low to High</option>
-                                    <option value="price-high">Price: High to Low</option>
-                                    <option value="az">Alphabetic: A–Z</option>
-                                    <option value="za">Alphabetic: Z–A</option>
-                                </select>
-                            </div>
-
-                            {/* Products Grid */}
-                            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                                {visibleProducts.map((product) => (
-                                    <div
-                                        key={product.id}
-                                        className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition"
-                                    >
-                                        {/* Image */}
-                                        <Link href={`/product/${product.id}`}>
-                                            <div className="mx-2 my-2 relative aspect-square">
-                                                {!product.inStock && (
-                                                    <span className="absolute top-2 left-2 bg-red-600 text-white text-xs px-2 py-1 rounded z-10">
-                                                        Out of Stock
-                                                    </span>
-                                                )}
-
-                                                {/* SALE BADGE */}
-                                                {product.sale && (
-                                                    <span className="absolute top-2 right-2 bg-green-600 text-white text-xs px-2 py-1 rounded z-10 font-semibold">
-                                                        {product.discount}% OFF
-                                                    </span>
-                                                )}
-
-                                                <Image
-                                                    src={Array.isArray(product.image) ? product.image[0] : product.image}
-                                                    alt={product.name}
-                                                    fill
-                                                    className="bg-[#e7e8e9] object-contain"
-                                                />
-                                            </div>
-
-                                        </Link>
-
-                                        <div className="p-4 space-y-">
-
-                                            {/* Name */}
-                                            <Link href={`/product/${product.id}`}>
-                                                <h3 className="text-md font-bold line-clamp-1 -mt-3 uppercase hover:underline transition ">
-                                                    {product.name}
-                                                </h3>
-                                            </Link>
-
-                                            {/* ⭐ Rating */}
-                                            <div className="mt-1 min-h-[1.25rem]">
-                                                {renderStars(product.rating || 4)}
-                                            </div>
-
-                                            {/* Description */}
-                                            <p className="text-xs text-gray-600 line-clamp-2 min-h-[2rem] mt-1">
-                                                {product.description ||
-                                                    "High quality supplement for daily health support."}
-                                            </p>
-
-                                            {/* Price + Cart */}
-                                            <div className="flex items-center justify-between mt-1 min-h-[2rem]">
-                                                <div className="flex items-center gap-2">
-                                                    <span className="font-bold text-lg text-gray-900">
-                                                        Rs.{product.price.toLocaleString()}
-                                                    </span>
-                                                </div>
-
-                                                <button
-                                                    onClick={() => handleAddToCart(product)}
-                                                    disabled={!product.inStock}
-                                                    className={`px-2 py-1 rounded transition
-                                                            ${product.inStock
-                                                            ? "bg-[#009B7A] text-white hover:bg-[#07b38e]"
-                                                            : "bg-gray-300 text-gray-500 cursor-not-allowed"}
-                                                        `}
-                                                >
-                                                    <FaCartPlus />
-                                                </button>
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-
-                            {/* Pagination */}
-                            {visibleCount < filteredProducts.length && (
-                                <div className="flex justify-center mt-12">
-                                    <button
-                                        onClick={() => setVisibleCount((prev) => prev + 20)}
-                                        className="px-8 py-3 bg-[#009B7A] text-white rounded hover:bg-[#07b38e] transition"
-                                    >
-                                        SHOW MORE
-                                    </button>
-                                </div>
-                            )}
-
-                        </div>
-                    </div>
+                <div className="flex items-center justify-between mt-2">
+                  <span className="text-lg font-bold">
+                    Rs.{product.price.toLocaleString()}
+                  </span>
+                  {product.discount > 0 && (
+                    <span className="text-xs bg-red-100 text-red-700 px-2 py-0.5 rounded">
+                      {product.discount}% OFF
+                    </span>
+                  )}
                 </div>
-            </section>
 
-            <Footer />
-        </main>
-    );
+                <button
+                  onClick={() => handleAddToCart(product)}
+                  disabled={!product.inStock}
+                  className={`mt-4 w-full py-2 text-sm font-medium border rounded
+                    ${
+                      product.inStock
+                        ? "text-[#009B7A] border-[#009B7A] hover:bg-[#009B7A] hover:text-white"
+                        : "text-gray-400 border-gray-300 cursor-not-allowed"
+                    }`}
+                >
+                  {product.inStock ? "ADD TO CART" : "OUT OF STOCK"}
+                </button>
+              </div>
+            ))}
+          </div>
+
+          {filteredProducts.length === 0 && (
+            <p className="text-center text-gray-500 mt-8">
+              No products found matching your filters.
+            </p>
+          )}
+        </div>
+      </section>
+
+      <Footer />
+      {showToast && <Toast message={toastMsg} />}
+    </main>
+  );
 }
