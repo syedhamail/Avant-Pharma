@@ -13,7 +13,7 @@ export type CartItem = {
 
 type CartContextType = {
   cart: CartItem[];
-  addToCart: (item: CartItem) => void;
+  addToCart: (item: CartItem) => "exists" | "added"; 
   removeFromCart: (id: string) => void;
   updateQty: (id: string, qty: number) => void;
   clearCart: () => void;
@@ -56,16 +56,19 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   }, [buyNowItem]);
 
   // ----------------- CART ACTIONS ------------------
-  const addToCart = (item: CartItem) => {
+  const addToCart = (item: CartItem): "exists" | "added" => {
+    let status: "exists" | "added" = "added";
+
     setCart((prev) => {
       const existing = prev.find((i) => i.id === item.id);
       if (existing) {
-        return prev.map((i) =>
-          i.id === item.id ? { ...i, qty: i.qty + item.qty } : i
-        );
+        status = "exists";
+        return prev; // qty nahi badhayenge, list same rahegi
       }
       return [...prev, item];
     });
+
+    return status;
   };
 
   const removeFromCart = (id: string) => {
