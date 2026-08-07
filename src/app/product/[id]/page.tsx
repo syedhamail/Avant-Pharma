@@ -12,10 +12,9 @@ import { useCart } from "../../context/CartContext";
 import Toast from "../../components/Toast";
 
 export default function ProductDetailPage() {
-  // ✅ ALL HOOKS AT TOP
   const { id } = useParams();
   const router = useRouter();
-  const { addToCart, setBuyNowItem } = useCart();
+  const { addToCart, setBuyNowItem, cart } = useCart(); // ✅ cart bhi le lo
 
   const [qty, setQty] = useState(1);
   const [showToast, setShowToast] = useState(false);
@@ -23,7 +22,6 @@ export default function ProductDetailPage() {
 
   const product = products.find((p) => p.id === Number(id));
 
-  // ✅ Early return AFTER hooks
   if (!product) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -50,28 +48,38 @@ export default function ProductDetailPage() {
   );
 
   const handleAddToCart = () => {
-    const result = addToCart(product);
+    const productId = String(product.id); // ✅ string conversion
+    const exists = cart.some((item) => item.id === productId);
 
-    setToastMsg(
-      result === "exists"
-        ? "Product already in cart"
-        : "Product added to cart!"
-    );
+    if (exists) {
+      setToastMsg("Product already in cart");
+    } else {
+      addToCart({
+        id: productId,
+        name: product.name,
+        price: product.price,
+        image: Array.isArray(product.image) ? product.image[0] : product.image,
+        qty: qty,
+        category: product.category,
+      });
+      setToastMsg("Product added to cart!");
+    }
 
     setShowToast(true);
     setTimeout(() => setShowToast(false), 2000);
   };
 
   const handleBuyNow = () => {
-    setBuyNowItem({
-      id: product.id,
+    const cartItem = {
+      id: String(product.id), // ✅ string
       name: product.name,
       price: product.price,
       image: Array.isArray(product.image) ? product.image[0] : product.image,
-      qty,
-    });
-
-    router.push("/checkout");
+      qty: qty,
+      category: product.category,
+    };
+    setBuyNowItem(cartItem);
+    router.push(`/checkout?buyNowId=${product.id}`);
   };
 
   return (
@@ -81,7 +89,6 @@ export default function ProductDetailPage() {
       <section className="py-12">
         <div className="container mx-auto px-6 max-w-7xl">
           {/* Breadcrumb */}
-
           <p className="text-sm text-gray-500 mb-6 flex flex-wrap items-center">
             <Link href="/" className="hover:underline">
               Home
@@ -98,12 +105,10 @@ export default function ProductDetailPage() {
             )}
           </p>
 
-
           <div className="grid grid-cols-1 md:grid-cols-2 gap-14 items-start">
             {/* LEFT IMAGE */}
             <div className="flex justify-center items-start">
               <div className="relative w-[400px] h-[500px]">
-
                 <Image
                   src={
                     Array.isArray(product.image)
@@ -123,17 +128,14 @@ export default function ProductDetailPage() {
                 {product.name}
               </h1>
 
-              {/* ⭐ Dynamic Rating (same as products page) */}
               <div className="mt-1 min-h-[1.25rem] mb-4">
                 {renderStars(product.rating)}
               </div>
 
-              {/* Price */}
               <p className="text-2xl font-semibold mb-6">
                 Rs.{product.price.toLocaleString()}
               </p>
 
-              {/* Description */}
               <div className="mb-6">
                 <h3 className="font-semibold mb-2">Description:</h3>
                 <p className="text-sm text-gray-700 leading-relaxed">
@@ -151,9 +153,7 @@ export default function ProductDetailPage() {
                   >
                     <FaMinus />
                   </button>
-
                   <span className="min-w-[30px] text-center">{qty}</span>
-
                   <button
                     onClick={() => setQty(qty + 1)}
                     className="border p-2"
@@ -163,7 +163,6 @@ export default function ProductDetailPage() {
                 </div>
               </div>
 
-              {/* Discount */}
               <p className="text-sm text-gray-600">
                 Discount:{" "}
                 <span className="font-semibold text-green-600">
@@ -171,7 +170,6 @@ export default function ProductDetailPage() {
                 </span>
               </p>
 
-              {/* Subtotal */}
               <p className="text-sm text-gray-600 mb-6">
                 Subtotal:{" "}
                 <span className="font-semibold">
@@ -196,7 +194,6 @@ export default function ProductDetailPage() {
                 >
                   BUY IT NOW
                 </button>
-
               </div>
             </div>
           </div>
@@ -204,9 +201,7 @@ export default function ProductDetailPage() {
       </section>
 
       <Footer />
-
       {showToast && <Toast message={toastMsg} />}
-
     </main>
   );
 }

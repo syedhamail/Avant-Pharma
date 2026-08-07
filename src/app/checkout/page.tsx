@@ -9,9 +9,15 @@ import Link from "next/link";
 import { supabase } from "@/lib/supabase";
 import Header from "../components/header";
 import Footer from "../components/footer";
+import { useSearchParams } from "next/navigation";
+// Import your product data (if static) – adjust path accordingly
+// import { allProducts } from "@/data/products";
 
 export default function CheckoutPage() {
     const { cart, buyNowItem, setBuyNowItem } = useCart();
+    const searchParams = useSearchParams();
+    const buyNowId = searchParams.get("buyNowId");
+
     const [mounted, setMounted] = useState(false);
 
     const [email, setEmail] = useState("");
@@ -30,15 +36,40 @@ export default function CheckoutPage() {
         type: "error" | "success";
     } | null>(null);
 
-    useEffect(() => setMounted(true), []);
+    // Hydration guard
+    useEffect(() => {
+        setMounted(true);
+    }, []);
 
-    // (Optional) If you want to clear buyNowItem when the user leaves the page without ordering,
-    // uncomment the following. Otherwise, we clear it only after successful order.
-    // useEffect(() => {
-    //     return () => {
-    //         setBuyNowItem(null);
-    //     };
-    // }, []);
+    // FALLBACK: if buyNowId in URL but buyNowItem not in localStorage, fetch product
+    useEffect(() => {
+        if (!mounted) return;
+        if (buyNowId && !buyNowItem) {
+            // Option 1: Fetch from Supabase
+            const fetchProduct = async () => {
+                const { data, error } = await supabase
+                    .from("products") // change to your actual table name
+                    .select("*")
+                    .eq("id", buyNowId)
+                    .single();
+                if (data) {
+                    setBuyNowItem({
+                        id: data.id,
+                        name: data.name,
+                        price: data.price,
+                        qty: 1,
+                        image: data.image,
+                        category: data.category,
+                    });
+                }
+            };
+            fetchProduct();
+
+            // Option 2: If you have static data, use it instead:
+            // const found = allProducts.find(p => p.id === buyNowId);
+            // if (found) setBuyNowItem({ ...found, qty: 1 });
+        }
+    }, [buyNowId, buyNowItem, mounted, setBuyNowItem]);
 
     if (!mounted) return null;
 
@@ -60,7 +91,6 @@ export default function CheckoutPage() {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        // 🔴 Basic validation
         if (!email || !phone || !firstName || !lastName || !address || !city) {
             showToast("Please fill all required fields", "error");
             return;
@@ -68,7 +98,6 @@ export default function CheckoutPage() {
 
         setLoading(true);
 
-        // 🛒 Products JSON
         const productsJson = itemsToShow.map((item) => ({
             id: item.id,
             name: item.name,
@@ -78,7 +107,6 @@ export default function CheckoutPage() {
             category: item.category,
         }));
 
-        // 1️⃣ Save order in Supabase
         const { error } = await supabase
             .from("AvantPharma_Customers_Orders")
             .insert({
@@ -101,16 +129,13 @@ export default function CheckoutPage() {
             return;
         }
 
-        // 2️⃣ Instant success UI (FAST UX)
         showToast("🎉 Order placed successfully!", "success");
         setOrderComplete(true);
 
-        // ✅ FIX: Clear buyNowItem after successful order
-        // This ensures the checkout page doesn't show the item again if the user refreshes
-        // after ordering (though they'll see the order complete screen anyway).
+        // Clear buyNowItem after successful order
         setBuyNowItem(null);
 
-        // 3️⃣ 📧 Send Email (BACKGROUND - fire & forget)
+        // Background emails...
         fetch("/api/send-order-email", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -123,7 +148,6 @@ export default function CheckoutPage() {
             }),
         }).catch((err) => console.error("Email error:", err));
 
-        // 4️⃣ 📲 Send Email to ADMIN (BACKGROUND - fire & forget)
         fetch("/api/send-admin-order-email", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -180,7 +204,6 @@ export default function CheckoutPage() {
 
             <section className="container mx-auto max-w-7xl px-4 py-10 grid grid-cols-1 lg:grid-cols-2 gap-10">
 
-                {/* LEFT SIDE – FORM */}
                 <form onSubmit={handleSubmit} className="space-y-6">
                     <div>
                         <h2 className="text-lg font-semibold mb-4">Contact</h2>
@@ -226,9 +249,7 @@ export default function CheckoutPage() {
                     </div>
                 </form>
 
-                {/* RIGHT SIDE – SUMMARY */}
                 <div className="border rounded-lg p-5 h-fit">
-                    {/* Products (ORIGINAL PRICE) */}
                     {itemsToShow.map((item) => (
                         <div key={item.id} className="flex items-center gap-4 mb-4">
                             <div className="relative">
@@ -248,32 +269,27 @@ export default function CheckoutPage() {
                                 <p className="text-sm font-medium">{item.name}</p>
                             </div>
 
-                            {/* ORIGINAL PRICE */}
                             <p className="text-sm font-semibold">
                                 Rs.{(item.price * item.qty).toLocaleString()}
                             </p>
                         </div>
                     ))}
 
-                    {/* Discount (ONLY %) */}
                     <div className="flex justify-between text-sm mb-2">
                         <span>Discount</span>
                         <span>{discountPercentage}%</span>
                     </div>
 
-                    {/* Shipping */}
                     <div className="flex justify-between text-sm mb-2">
                         <span>Shipping</span>
                         <span>FREE</span>
                     </div>
 
-                    {/* Subtotal (AFTER DISCOUNT) */}
                     <div className="flex justify-between text-sm mb-2">
                         <span>Subtotal</span>
                         <span>Rs.{discountedSubtotal.toLocaleString()}</span>
                     </div>
 
-                    {/* Total */}
                     <div className="flex justify-between font-semibold border-t pt-3 text-[#009B7A]">
                         <span>Total</span>
                         <span>Rs.{discountedSubtotal.toLocaleString()}</span>
