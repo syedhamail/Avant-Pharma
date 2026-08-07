@@ -55,7 +55,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     }
   }, [buyNowItem]);
 
-  // ----------------- CART ACTIONS ------------------
+  // ----------------- CART ACTIONS -------------------
   const addToCart = (item: CartItem): "exists" | "added" => {
     let status: "exists" | "added" = "added";
 
