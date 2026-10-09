@@ -1,6 +1,9 @@
 # *
 User-agent: *
 Allow: /
+Disallow: /api/*
+Disallow: /checkout
+Disallow: /cart
 
 # Host
 Host: https://www.avantpharmaceutical.com.pk
