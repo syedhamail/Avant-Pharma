@@ -330,11 +330,11 @@ export default function ProductsPage() {
                                                 )}
 
                                                 {/* SALE BADGE */}
-                                                {product.sale && (
+                                                {/* {product.sale && (
                                                     <span className="absolute top-2 right-2 bg-green-600 text-white text-xs px-2 py-1 rounded z-10 font-semibold">
                                                         {product.discount}% OFF
                                                     </span>
-                                                )}
+                                                )} */}
 
                                                 <Image
                                                     src={Array.isArray(product.image) ? product.image[0] : product.image}

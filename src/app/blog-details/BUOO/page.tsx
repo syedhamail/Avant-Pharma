@@ -274,7 +274,7 @@ export default function BUOO() {
                         </h1>
                         <span className="flex justify-center items-center border-2 w-80 pt-7 pb-7 space-x-8">
                             <span>
-                                <a href="https://www.facebook.com/avantpharma" className="text-blue-800 ">
+                                <a href="https://www.facebook.com/profile.php?id=61594224072327" className="text-blue-800 ">
                                     <FaFacebook />
                                 </a>
                             </span>
@@ -284,7 +284,7 @@ export default function BUOO() {
                                 </a>
                             </span>
                             <span>
-                                <a href="https://www.linkedin.com/company/avant-pharmapakistan/" className="text-blue-700">
+                                <a href="https://www.linkedin.com/in/avant-pharma-47b443441/" className="text-blue-700">
                                     <FaLinkedinIn />
                                 </a>
                             </span>

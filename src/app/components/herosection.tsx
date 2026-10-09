@@ -20,7 +20,7 @@ const HeroSection = () => {
                     {/* 🔥 Discount Badge */}
                     <div className="inline-flex items-center gap-2 bg-white px-4 py-2 rounded-full shadow-md mb-6">
                         <span className="text-md md:text-xl font-bold text-[#009B7A]">
-                            Flat 20% OFF on All Medicines
+                            Flat 10% OFF on 5 Products
                         </span>
                     </div>
 

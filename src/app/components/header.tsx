@@ -48,9 +48,9 @@ export default function Header() {
 
             {/* 🔥 Discount Top Bar */}
             <div className="bg-gradient-to-r from-[#00B894] to-[#00D2C6] text-white text-center py-2 text-sm md:text-lg lg:text-xl font-semibold">
-                🎉 Flat <span className="font-bold">20% OFF</span> on All Products – Limited Time Offer
+                 🎉 Buy 5 Products & Enjoy <span className="font-bold">10% OFF</span> – Limited Time Offer
             </div>
-
+            
             {/* Header Section */}
             <header className="">
 

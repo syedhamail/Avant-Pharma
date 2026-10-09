@@ -31,9 +31,9 @@ export default function ProductDetailPage() {
     );
   }
 
-  const discountPercentage = product.discount || 0;
-  const discountedPrice =
-    product.price - (product.price * discountPercentage) / 100;
+  // const discountPercentage = product.discount || 0;
+  // const discountedPrice =
+  //   product.price - (product.price * discountPercentage) / 100;
 
   const renderStars = (rating: number) => (
     <div className="flex items-center gap-1 text-yellow-500 text-sm">
@@ -164,7 +164,7 @@ export default function ProductDetailPage() {
                 </div>
               </div>
 
-              <p className="text-sm text-gray-600">
+              {/* <p className="text-sm text-gray-600">
                 Discount:{" "}
                 <span className="font-semibold text-green-600">
                   {discountPercentage}% OFF
@@ -176,7 +176,7 @@ export default function ProductDetailPage() {
                 <span className="font-semibold">
                   Rs.{(discountedPrice * qty).toLocaleString()}
                 </span>
-              </p>
+              </p> */}
 
               {/* Buttons */}
               <div className="flex gap-4">

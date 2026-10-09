@@ -8,17 +8,19 @@ export default function Footer() {
             className="text-white px-4 sm:px-6 py-8 sm:py-10 rounded-t-2xl md:rounded-t-3xl mt-16 sm:mt-[10%]"
         >
             <div className="mx-auto max-w-5xl grid grid-cols-1 md:grid-cols-2 gap-8 sm:gap-10 text-xs sm:text-sm">
+
                 {/* Left Section - Company Image */}
                 <div className="flex justify-center md:justify-start items-center px-4 sm:px-0">
                     <img
                         src="/Avant-Website-Photos/avant-company.png"
                         alt="avantcompany"
-                        className="w-full max-w-md md:w-[90%] rounded-lg border-2 border-gray-300 shadow-lg"
+                        className="w-full max-w-md md:w-[90%] rounded-lg border-2 border-gray-300 shadow-lg object-cover"
                     />
                 </div>
 
                 {/* Right Section - Content */}
                 <div className="flex flex-col space-y-4 sm:space-y-6 items-center text-center md:items-start md:text-left px-4 sm:px-0">
+
                     {/* Logo */}
                     <Link
                         href="/"
@@ -29,39 +31,71 @@ export default function Footer() {
                             alt="Avant Logo"
                             className="w-10 h-12 sm:w-[50px] sm:h-[60px] rounded-full object-cover"
                         />
-                        <span className="ml-2 sm:ml-3 text-lg sm:text-xl text-[#009B7A] font-bold">AVANT PHARMA</span>
+                        <span className="ml-2 sm:ml-3 text-lg sm:text-xl text-[#009B7A] font-bold">
+                            AVANT PHARMA
+                        </span>
                     </Link>
 
-                    {/* Factory Addresses - Stack on mobile, row on larger screens */}
-                    <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 w-full">
-                        <div className="flex-1">
-                            <p className="mb-1 font-bold">Factory 1:</p>
-                            <p className="mb-1">Plot # 4/103, 4/104 Sector #21</p>
-                            <p className="mb-1">Korangi Industrial Area,</p>
-                            <p className="mb-1">Karachi-Pakistan.</p>
-                        </div>
-                        <div className="flex-1">
-                            <p className="mb-1 font-bold">Factory 2:</p>
-                            <p className="mb-1">Plot # M-28, Hub Industrial Trading</p>
-                            <p className="mb-1">Estate, Hub-Pakistan.</p>
-                            <p className="mb-1">Karachi-Pakistan.</p>
-                        </div>
-                    </div>
+                    {/* Nested Grid: Factories on Left, Contact Info on Right */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full text-white/90">
 
-                    {/* Contact Info */}
-                    <div className="w-full">
-                        <p className="mb-1">
-                            <span className="font-bold">Contact Person:</span> Faraz Ali Syed
-                        </p>
-                        <p className="mb-1">
-                            <span className="font-bold">Email ID:</span> farazali84@yahoo.com <br /> avantpharma.pakistan@gmail.com
-                        </p>
-                        <p className="mb-1">
-                            <span className="font-bold">Mobile No:</span> 03218288378
-                        </p>
-                        <p className="mb-1">
-                            <span className="font-bold">Website:</span> <Link href="/">www.avantpharmaceutical.com.pk</Link>
-                        </p>
+                        {/* Left Column (Inside this grid) - Factories Stacked */}
+                        <div className="flex flex-col space-y-4">
+                            {/* Factory 1 */}
+                            <div>
+                                <h4 className="font-bold text-white mb-1">Factory 1</h4>
+                                <p className="leading-relaxed">Plot # 4/103, 4/104 Sector #21</p>
+                                <p className="leading-relaxed">Korangi Industrial Area,</p>
+                                <p className="leading-relaxed">Karachi-Pakistan.</p>
+                            </div>
+
+                            {/* Factory 2 */}
+                            <div>
+                                <h4 className="font-bold text-white mb-1">Factory 2</h4>
+                                <p className="leading-relaxed">Plot # M-28, Hub Industrial Trading</p>
+                                <p className="leading-relaxed">Estate, Hub-Pakistan.</p>
+                                <p className="leading-relaxed">Karachi-Pakistan.</p>
+                            </div>
+                        </div>
+
+                        {/* Right Column (Inside this grid) - Contact Info */}
+                        <div className="flex flex-col space-y-3 sm:border-l sm:border-white/20 sm:pl-4">
+                            <div>
+                                <h4 className="font-bold text-white mb-2">Contact Info</h4>
+
+                                <div className="mb-3">
+                                    <span className="block font-semibold text-white/80 text-[10px] uppercase mb-0.5">Email:</span>
+                                    {/* Email Links */}
+                                    <a href="mailto:avantpharma.pakistan@gmail.com" className="block leading-relaxed whitespace-nowrap hover:underline">
+                                        avantpharma.pakistan@gmail.com
+                                    </a>
+                                    <a href="mailto:farazali84@yahoo.com" className="block leading-relaxed whitespace-nowrap hover:underline">
+                                        farazali84@yahoo.com
+                                    </a>
+                                </div>
+
+                                <div className="mb-3">
+                                    <span className="block font-semibold text-white/80 text-[10px] uppercase mb-0.5">WhatsApp:</span>
+                                    {/* WhatsApp Link */}
+                                    <a 
+                                        href="https://wa.me/923218288378" 
+                                        target="_blank" 
+                                        rel="noopener noreferrer" 
+                                        className="block leading-relaxed hover:underline"
+                                    >
+                                        03218288378
+                                    </a>
+                                </div>
+
+                                <div>
+                                    <span className="block font-semibold text-white/80 text-[10px] uppercase mb-0.5">Website:</span>
+                                    <Link href="/" className="leading-relaxed hover:underline whitespace-nowrap">
+                                        www.avantpharmaceutical.com.pk
+                                    </Link>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </div>

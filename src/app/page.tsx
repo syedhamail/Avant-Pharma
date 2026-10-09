@@ -9,6 +9,8 @@ import ContactUs from "./components/contactus";
 import Footer from "./components/footer";
 import BlogSection from "./components/BlogSection";
 import PakistanFootprint from "./components/PakistanFootprint";
+import FloatingSocials from "./components/FloatingSocials"; // Naya component import kiya
+
 export default function Home() {
   const products = [
     {
@@ -37,7 +39,10 @@ export default function Home() {
     },
   ];
   return (
-    <main className="bg-white">
+    <main className="bg-white relative">
+
+      {/* Floating Social Icons & WhatsApp Button */}
+      <FloatingSocials />
 
       {/* Header */}
       <Header />
@@ -177,7 +182,7 @@ export default function Home() {
                   </p>
                   <Link href="/h-p-s#history" className="mt-3 text-black inline-flex items-center hover:text-gray-700 font-medium transition-colors">
                     Read More
-                    <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" className="w-4 h-4 ml-2" viewBox="0 0 24 24">
+                    <svg fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" className="w-4 h-4 ml-2" viewBox="0 0 24 24">
                       <path d="M5 12h14M12 5l7 7-7 7"></path>
                     </svg>
                   </Link>
@@ -199,7 +204,7 @@ export default function Home() {
                   </p>
                   <Link href="/h-p-s#philosophy" className="mt-3 text-black inline-flex items-center hover:text-gray-700 font-medium transition-colors">
                     Read More
-                    <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" className="w-4 h-4 ml-2" viewBox="0 0 24 24">
+                    <svg fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" className="w-4 h-4 ml-2" viewBox="0 0 24 24">
                       <path d="M5 12h14M12 5l7 7-7 7"></path>
                     </svg>
                   </Link>
@@ -221,7 +226,7 @@ export default function Home() {
                   </p>
                   <Link href="/h-p-s#strengths" className="mt-3 text-black inline-flex items-center hover:text-gray-700 font-medium transition-colors">
                     Read More
-                    <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" className="w-4 h-4 ml-2" viewBox="0 0 24 24">
+                    <svg fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" className="w-4 h-4 ml-2" viewBox="0 0 24 24">
                       <path d="M5 12h14M12 5l7 7-7 7"></path>
                     </svg>
                   </Link>
@@ -321,7 +326,7 @@ export default function Home() {
                 </p>
                 <Link href="/avant/productDevelopment" className="mt-3 text-black inline-flex items-center hover:text-gray-700 font-medium transition-colors">
                   Read More
-                  <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" className="w-4 h-4 ml-2" viewBox="0 0 24 24">
+                  <svg fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" className="w-4 h-4 ml-2" viewBox="0 0 24 24">
                     <path d="M5 12h14M12 5l7 7-7 7"></path>
                   </svg>
                 </Link>
@@ -343,7 +348,7 @@ export default function Home() {
                 </p>
                 <Link href="/avant/quality" className="mt-3 text-black inline-flex items-center hover:text-gray-700 font-medium transition-colors">
                   Read More
-                  <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" className="w-4 h-4 ml-2" viewBox="0 0 24 24">
+                  <svg fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" className="w-4 h-4 ml-2" viewBox="0 0 24 24">
                     <path d="M5 12h14M12 5l7 7-7 7"></path>
                   </svg>
                 </Link>
@@ -365,7 +370,7 @@ export default function Home() {
                 </p>
                 <Link href="/avant/manufacturingPlant" className="mt-3 text-black inline-flex items-center hover:text-gray-700 font-medium transition-colors">
                   Read More
-                  <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" className="w-4 h-4 ml-2" viewBox="0 0 24 24">
+                  <svg fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" className="w-4 h-4 ml-2" viewBox="0 0 24 24">
                     <path d="M5 12h14M12 5l7 7-7 7"></path>
                   </svg>
                 </Link>
@@ -387,7 +392,7 @@ export default function Home() {
                 </p>
                 <Link href="/avant/research&Development" className="mt-3 text-black inline-flex items-center hover:text-gray-700 font-medium transition-colors">
                   Read More
-                  <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" className="w-4 h-4 ml-2" viewBox="0 0 24 24">
+                  <svg fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" className="w-4 h-4 ml-2" viewBox="0 0 24 24">
                     <path d="M5 12h14M12 5l7 7-7 7"></path>
                   </svg>
                 </Link>
@@ -409,7 +414,7 @@ export default function Home() {
                 </p>
                 <Link href="/avant/sales&marketing" className="mt-3 text-black inline-flex items-center hover:text-gray-700 font-medium transition-colors">
                   Read More
-                  <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" className="w-4 h-4 ml-2" viewBox="0 0 24 24">
+                  <svg fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" className="w-4 h-4 ml-2" viewBox="0 0 24 24">
                     <path d="M5 12h14M12 5l7 7-7 7"></path>
                   </svg>
                 </Link>
@@ -431,7 +436,7 @@ export default function Home() {
                 </p>
                 <Link href="/avant/exportOperations" className="mt-3 text-black inline-flex items-center hover:text-gray-700 font-medium transition-colors">
                   Read More
-                  <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" className="w-4 h-4 ml-2" viewBox="0 0 24 24">
+                  <svg fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" className="w-4 h-4 ml-2" viewBox="0 0 24 24">
                     <path d="M5 12h14M12 5l7 7-7 7"></path>
                   </svg>
                 </Link>
@@ -454,7 +459,7 @@ export default function Home() {
                 </p>
                 <Link href="/avant/supplyChain" className="mt-3 text-black inline-flex items-center hover:text-gray-700 font-medium transition-colors">
                   Read More
-                  <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" className="w-4 h-4 ml-2" viewBox="0 0 24 24">
+                  <svg fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" className="w-4 h-4 ml-2" viewBox="0 0 24 24">
                     <path d="M5 12h14M12 5l7 7-7 7"></path>
                   </svg>
                 </Link>
